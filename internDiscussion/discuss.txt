@@ -1,0 +1,59 @@
+Problem Statement : Elaborate what your internship or academic projects were?
+a. What did the system do?
+Ans -> 
+I had remained Software Engineer Intern in Atlassian and Sharechat. In Atlassian , I worked majorly on unit testing using junit and Mockito in psrint boot and kotlin.
+Also integrated AI in Jira Ticket System which ia an internal tool for Atlassian employees so that when employee raises any ticket , it should be resolved with AI which helps reduce the human workload.
+In Sharechat , I was involved with writing CRON job which automates the process of generating the script , uploading to GCS and then Finance/OPS tema can access the report.
+Also I awas involved with unit testing in GOLang using Gomockk and testify library.
+Apart from this , I did with the automation of UI using maestro.
+
+b.What other systems have you seen in the wild like that?
+Ans->
+Intercom and Freshdesk: These platforms leverage AI-driven bots for initial ticket resolution and proactive issue identification, often assisting customers directly without human intervention.
+Zendesk and Salesforce Service Cloud: Both incorporate AI to categorize, prioritize, and even answer support tickets, using historical data and pattern recognition to assist agents and automate simpler responses.
+
+c.How do you approach the development problem?
+Ans -> When approaching a development problem, here’s a general process I follow to ensure a structured, efficient solution:
+1. Understanding the Problem Requirements
+2. Research and Analysis -> explore existing solutions and analyze technical feasibility 
+3. Designing the Architecture
+4. Implementation
+5. Review and Optimize
+6. Monitoring and Maintenance
+
+d.What were interesting aspects where you copied code from Stack Overflow?
+Ans ->
+1.Quick Syntax Fixes
+2.Best Practices for Error Handling
+3.Library Setup and Usage -> Integration of libraries , how can they be used 
+
+e.What did you learn from some very specific copy paste? Mention explicitly some
+of them.
+Ans ->
+1.Setting Up CORS in Express.js
+Example: Early on, I copied this CORS setup code to allow cross-origin requests in an Express API:
+```const cors = require("cors");
+app.use(cors());```
+
+What I Learned: This simple snippet taught me how to configure cross-origin access properly and made me more mindful of the security implications. I later learned how to fine-tune it with specific origins and HTTP methods, enhancing my knowledge of web security and CORS policies.
+
+2.Mocking Interfaces with gomock
+Example: I found a solution using gomock to mock dependencies in unit tests, particularly useful when testing functions with dependencies on external services.
+
+```func TestGetUserDetails(t *testing.T) {
+    ctrl := gomock.NewController(t)
+    defer ctrl.Finish()
+
+    mockUserService := NewMockUserService(ctrl)
+    mockUserService.EXPECT().GetUserByID("123").Return(User{Name: "John"}, nil)
+
+    result, err := GetUserDetails(mockUserService, "123")
+    if err != nil {
+        t.Errorf("Expected no error, got %v", err)
+    }
+    if result.Name != "John" {
+        t.Errorf("Expected user name to be John, got %v", result.Name)
+    }
+}```
+
+What I Learned: This example introduced me to dependency injection and mock creation with gomock. Using gomock.NewController and setting up expectations (EXPECT().GetUserByID) made it clear how mocks can simulate dependencies, allowing unit tests to focus on logic without requiring actual service calls. This approach improved the readability and isolation of my tests.

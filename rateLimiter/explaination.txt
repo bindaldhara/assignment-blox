@@ -1,0 +1,58 @@
+Problem Statement ->
+There is an API that one must call to get data. The trouble is it will not let you cross the limit of call - say 15 calls per minute. If you cross the limit, the system penalizes
+you by one additional minute of penalty where you can not make any call. Here is how the API looks like: function string call_me(string input).
+
+1. You would be able to use the API within the safe limit.
+Solution (apiLimiter1.js) ->
+This ApiRateLimiter class is designed to limit API call rates, allowing a maximum number of calls (maxCalls) within a given time window (timeWindow).
+
+2. What happens if you are supposed to call the API 20 times per minute? Is there
+any way to accomplish this?
+Solution (apiLimiter2.js) ->
+There are several ways to achieve:
+
+a.Increase the Time Window: If the API allows you to spread the calls over a longer time period, you can make calls over two consecutive minutes. For example, instead of trying to make 20 calls in one minute, you can spread them over two minutes (e.g., 10 calls in the first minute and 10 in the second).
+
+b.Batch Processing: If the API supports batch requests, consider combining multiple requests into a single call. This will depend on whether the API allows you to send an array of inputs and receive an array of responses.
+
+c.Optimize Call Frequency: Review the necessity of each API call. If some calls can be consolidated or eliminated based on business logic or previous responses, that can help you stay within limits.
+
+d.Exponential Backoff: Implement exponential backoff in your retry strategy. If a call fails due to rate limits, instead of retrying immediately, wait progressively longer before retrying. This helps to avoid quickly exceeding limits.
+
+e.Staggered Scheduling: Spread your calls across the time window. For example, instead of trying to send all 20 calls at once, you can schedule them at intervals throughout the minute.
+
+I went with 
+
+f.Using a Queue System with Time Slicing ->
+You can implement a queue system that schedules calls based on a timer. This method can efficiently manage calls without exceeding limits
+
+How It Works: Use a timing mechanism to release a specified number of calls every second or minute. For example, if you can make 15 calls per minute, you can allow 1 call every 4 seconds and queue the rest for subsequent minutes.
+Instead of enforcing strict limits on the number of calls made in a single period, we will allow calls to be made at a controlled rate over time, specifically by spreading them out across the allowed time window.
+
+Here’s how to implement this:
+
+Use a Timer: Instead of using a fixed delay between calls, we can create a timer that allows for a specified number of calls to be made per time window.
+Refactor the processQueue Method: We will make it more responsive to the current time window, allowing it to manage calls without penalty unless the limit is exceeded.
+
+
+3.If you were the API designer, what would you do to implement this behavior?
+Solution -> TokenBucket algorithm
+
+Explaination:
+Constructor: Initializes the token bucket with a maximum number of tokens (maxTokens) and a refill rate (refillRate).
+refill() Method: Calculates the elapsed time since the last refill and adds tokens accordingly, up to the maximum allowed tokens.
+requestToken() Method: Checks if a token can be granted. If a token is available, it decrements the token count and returns true; otherwise, it returns false.
+ApiRateLimiter Class:
+
+Constructor: Initializes the rate limiter with a token bucket instance.
+callApi() Method: Checks if a token can be granted using the requestToken() method. If a token is available, it processes the API call; otherwise, it rejects the promise with a rate limit error.
+call_me() Method: Simulates an API call with a timeout.
+
+Example Usage:
+
+An instance of ApiRateLimiter is created to allow 15 calls per minute.
+Simulates 20 API calls in a loop, handling any rate limit errors that may occur.
+Key Features
+Dynamic Token Refilling: Tokens are refilled based on time elapsed since the last request, allowing for burst requests while controlling the overall rate.
+Error Handling: Provides feedback when rate limits are exceeded.
+Simulated API Call: The call_me() function simulates an asynchronous API call.

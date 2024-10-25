@@ -1,0 +1,27 @@
+Problem Statement ->
+Write a function to parse any valid json string into a corresponding Object, List, or Map
+object. You can use C,C++, Java, Scala, Kotlin, Python, Node. Note that the integer and
+floating point should be arbitrary precision.
+
+Solution ->
+Key Components : 
+1.Main Function parseJson(jsonStr):
+This function takes a JSON string (jsonStr) and iteratively parses each value by identifying whether it's a string, number, array, object, or one of the literals (true, false, null).
+It uses an index variable to track the current position in the string while parsing each character.
+
+2.Helper Functions:
+a.parseValue(): Decides the type of the next JSON element and directs to the appropriate parsing function (parseStringOrNumber, parseObject, parseArray, parseNumber, parseLiteral).
+b.parseObject() and parseArray(): These functions parse objects ({...}) and arrays ([...]) respectively. They iterate through the contents, handling each key-value pair or array element.
+c.parseStringOrNumber(): Distinguishes between a string that represents a number (e.g., "123") and a true string (e.g., "text"). If it’s a numeric string, it’s processed by parseNumberFromString().
+d.isNumericString(str): Checks if a string can be interpreted as a number.
+e.parseNumberFromString(str): Uses BigNumber to parse the string. It decides whether to return the value as a regular number or as a BigNumber object:
+If the number is an integer and within JavaScript’s safe range (Number.MIN_SAFE_INTEGER to Number.MAX_SAFE_INTEGER), it returns a Number.
+Otherwise, it returns a BigNumber object for high-precision handling.
+f.parseLiteral(): Matches JSON literals (true, false, null) and returns their corresponding JavaScript values.
+g.skipWhitespace(): Advances the index past whitespace.
+h.scapeCharacter(char): Handles escape sequences inside strings (e.g., \n, \t).
+
+3.Example JSON String Parsing
+The JSON string jsonString contains a mix of:
+Large integers and floats as strings (to avoid JavaScript precision limits during parsing).
+Nested objects and arrays with mixed data types (integers, strings).
